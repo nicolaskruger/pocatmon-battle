@@ -1,8 +1,8 @@
 "use strict";
-const button = document.getElementById("count");
-const p = document.getElementById("counter");
-let count = 0;
-const doCount = () => ++count;
-const doShow = () => p.innerHTML = `${count}`;
-const doDo = () => [doCount, doShow].forEach(fun => fun());
-button.addEventListener("click", doDo);
+const can = document.getElementById("can");
+const ctx = can.getContext("2d");
+ctx.font = "48px Roboto";
+ctx.textAlign = "center";
+ctx.fillText("open the door", 200, 200);
+ctx.font = "12px Roboto";
+ctx.fillText("<press space/>", 200, 250);

@@ -1,10 +1,8 @@
-const button = document.getElementById("count") as HTMLButtonElement;
-const p = document.getElementById("counter") as HTMLParagraphElement;
-let count = 0;
+const can = document.getElementById("can") as HTMLCanvasElement;
+const ctx = can.getContext("2d")!;
 
-const doCount = () => ++count;
-const doShow = () => p.innerHTML = `${count}`;
-
-const doDo = () => [doCount, doShow].forEach(fun => fun())
-
-button.addEventListener("click", doDo);
+ctx.font = "48px Roboto";
+ctx.textAlign = "center";
+ctx.fillText("open the door", 200, 200)
+ctx.font = "12px Roboto";
+ctx.fillText("<press space/>", 200, 250)
