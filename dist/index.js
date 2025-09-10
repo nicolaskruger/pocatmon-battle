@@ -1,16 +1,48 @@
 "use strict";
 const can = document.getElementById("can");
 const ctx = can.getContext("2d");
+const width = 400;
+const heigth = 400;
 const fps = 60;
 const mspf = Math.floor(1000 / 60);
-ctx.font = "48px Roboto";
-ctx.textAlign = "center";
-ctx.fillText("open the door", 200, 200);
-ctx.font = "12px Roboto";
-ctx.fillText("<press space/>", 200, 250);
-let count = 0;
+const renderClear = () => {
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, width, heigth);
+};
+const renderTitle = () => {
+    ctx.font = "48px Roboto";
+    ctx.textAlign = "center";
+    ctx.fillText("open the door", 200, 200);
+    ctx.font = "12px Roboto";
+    ctx.fillText("<press space/>", 200, 250);
+};
+let space = false;
+const spacePress = () => space = true;
+const spaceRealese = () => space = false;
+const controllAction = (act) => (event) => event.code == "Space" && act();
+document.addEventListener("keydown", controllAction(spacePress));
+document.addEventListener("keyup", controllAction(spaceRealese));
+const start = async () => {
+    if (space)
+        states = onStart;
+    ctx.fillStyle = "black";
+    renderTitle();
+};
+let fade = 0;
+const onStart = async () => {
+    ctx.fillStyle = `rgb(${fade},${fade},${fade})`;
+    ;
+    renderTitle();
+    fade += 10;
+    if (fade >= 255)
+        states = catFloor;
+};
+const catFloor = async () => {
+};
+let states = start;
 const loop = async () => {
-    console.log(++count);
+    renderClear();
+    await states();
 };
 const run = async () => {
     const begin = performance.now();
