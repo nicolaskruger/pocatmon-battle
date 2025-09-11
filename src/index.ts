@@ -1,3 +1,36 @@
+const catFrame00 = [
+  "---------@----@--",
+  "---------@@--@@--",
+  "---------@@@@@@--",
+  "--------@@@@@@@@-",
+  "--------@@@@@@@@-",
+  "---------@@@@@@--",
+  "----------@@@@---",
+  "---------@@@@@@--",
+  "---------@@@@@@--",
+  "--------@@@@@@@@-",
+  "--------@@@@@@@@-",
+  "-------@@@@@@@@@@",
+  "-------@@@@@@@@@@",
+]
+
+const catFrame01 = [
+  "---------@----@--",
+  "---------@@--@@--",
+  "---------@@@@@@--",
+  "--------@@@@@@@@-",
+  "---@----@@@@@@@@-",
+  "----@----@@@@@@--",
+  "----@-----@@@@---",
+  "-----@---@@@@@@--",
+  "------@--@@@@@@--",
+  "-------@@@@@@@@@-",
+  "--------@@@@@@@@-",
+  "-------@@@@@@@@@@",
+  "-------@@@@@@@@@@",
+]
+
+const catFrames = [catFrame00, catFrame01]
 const can = document.getElementById("can") as HTMLCanvasElement;
 const ctx = can.getContext("2d")!;
 
@@ -10,6 +43,25 @@ const mspf = Math.floor(1000 / 60);
 const renderClear = () => {
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, width, heigth);
+}
+
+const renderFrame = (x: number, y: number, frame: string[], mult = 1) => {
+  const translate: { [key: string]: string } = {
+    "@": "black",
+    "-": "white"
+  }
+  frame.flatMap((line, yOff) =>
+    line.split("")
+      .map((pixel, xOff) => ({ color: translate[pixel], yOff, xOff })
+      ))
+    .forEach(data => {
+      ctx.fillStyle = data.color;
+      ctx.fillRect((x + mult * data.xOff), (y + mult * data.yOff), mult, mult)
+    })
+}
+
+const renderCat = () => {
+  ctx.fillStyle = "black";
 }
 
 const renderTitle = () => {
@@ -45,7 +97,11 @@ const onStart = async () => {
 }
 
 const catFloor = async () => {
-
+  const mult = 2;
+  const [cat00] = catFrames
+  const y = heigth - mult * cat00.length;
+  const x = width / 2;
+  renderFrame(x, y, cat00, mult)
 }
 
 let states = start;
