@@ -1,33 +1,41 @@
 "use strict";
 const catFrame00 = [
-    "---------@----@--",
-    "---------@@--@@--",
-    "---------@@@@@@--",
-    "--------@@@@@@@@-",
-    "--------@@@@@@@@-",
-    "---------@@@@@@--",
-    "----------@@@@---",
-    "---------@@@@@@--",
-    "---------@@@@@@--",
-    "--------@@@@@@@@-",
-    "--------@@@@@@@@-",
-    "-------@@@@@@@@@@",
-    "-------@@@@@@@@@@",
+    "--@----@--",
+    "--@@--@@--",
+    "--@@@@@@--",
+    "-@@@@@@@@-",
+    "-@@@@@@@@-",
+    "--@@@@@@--",
+    "---@@@@---",
+    "--@@@@@@--",
+    "--@@@@@@--",
+    "-@@@@@@@@-",
+    "-@@@@@@@@-",
+    "@@@@@@@@@@",
+    "@@@@@@@@@@",
 ];
 const catFrame01 = [
-    "---------@----@--",
-    "---------@@--@@--",
-    "---------@@@@@@--",
-    "--------@@@@@@@@-",
-    "---@----@@@@@@@@-",
-    "----@----@@@@@@--",
-    "----@-----@@@@---",
-    "-----@---@@@@@@--",
-    "------@--@@@@@@--",
-    "-------@@@@@@@@@-",
-    "--------@@@@@@@@-",
-    "-------@@@@@@@@@@",
-    "-------@@@@@@@@@@",
+    "--@----@--",
+    "--@@--@@--",
+    "--@@@@@@--",
+    "-@@@@@@@@-",
+    "-@@@@@@@@-",
+    "--@@@@@@--",
+    "-@-@@@@-@-",
+    "--@@@@@@--",
+    "--@@@@@@--",
+    "-@@@@@@@@-",
+    "-@@@@@@@@-",
+    "-@@@@@@@@-",
+    "-@@@@@@@@-",
+    "-@@@@@@@@-",
+    "-@@@@@@@@-",
+    "--@@@@@@--",
+    "--@-@@-@--",
+    "--@-@@-@--",
+    "----@@----",
+    "----@@----",
+    "----@@----",
 ];
 const catFrames = [catFrame00, catFrame01];
 const can = document.getElementById("can");
@@ -83,12 +91,39 @@ const onStart = async () => {
     if (fade >= 255)
         states = catFloor;
 };
+const antiAlising = (pos) => Math.floor(pos) + 0.5;
+const door = () => {
+    const doorW = 100;
+    const doorH = 200;
+    const doorX = width / 2 - doorW / 2 - 25;
+    const doorY = heigth - doorH;
+    const render = () => {
+        ctx.fillStyle = "black";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(antiAlising(doorX), antiAlising(doorY), doorW, doorH);
+    };
+    return { x: doorX, y: doorY, h: doorH, w: doorW, render };
+};
+const lock = () => {
+    const { x: doorX, w: doorW, h: doorH } = door();
+    const lockW = 20;
+    const lockH = 5;
+    const lockX = doorX + doorW - lockW - 5;
+    const lockY = doorH + 79;
+    const render = () => {
+        ctx.fillStyle = "black";
+        ctx.fillRect(lockX, lockY, lockW, lockH);
+    };
+    return { render };
+};
 const catFloor = async () => {
     const mult = 2;
-    const [cat00] = catFrames;
+    const [cat00] = catFrames.slice(1);
     const y = heigth - mult * cat00.length;
     const x = width / 2;
     renderFrame(x, y, cat00, mult);
+    door().render();
+    lock().render();
 };
 let states = start;
 const loop = async () => {
