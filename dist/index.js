@@ -114,16 +114,38 @@ const lock = () => {
         ctx.fillStyle = "black";
         ctx.fillRect(lockX, lockY, lockW, lockH);
     };
-    return { render };
+    return { render, y: lockY };
 };
-const catFloor = async () => {
+const cat = (state) => {
+    const { x, y, frame } = state ?? {};
     const mult = 2;
-    const [cat00] = catFrames.slice(1);
-    const y = heigth - mult * cat00.length;
-    const x = width / 2;
-    renderFrame(x, y, cat00, mult);
+    const frameCat = frame ?? catFrames[0];
+    const catY = y ?? (heigth - mult * frameCat.length);
+    const catX = x ?? (width / 2);
+    const render = () => renderFrame(catX, catY, frameCat, mult);
+    return { frame: frameCat, x: catX, y: catY, render, pawY: catY + mult * 6 };
+};
+const renderAllDoor = () => {
     door().render();
     lock().render();
+};
+let miau = cat();
+const catJumping = async () => {
+    miau = cat({ frame: catFrame01, y: miau.y - 2 });
+    miau.render();
+    if (miau.pawY < lock().y)
+        states = catEnd;
+    renderAllDoor();
+};
+const catEnd = async () => {
+    miau.render();
+    renderAllDoor();
+};
+const catFloor = async () => {
+    cat().render();
+    renderAllDoor();
+    if (space)
+        states = catJumping;
 };
 let states = start;
 const loop = async () => {
