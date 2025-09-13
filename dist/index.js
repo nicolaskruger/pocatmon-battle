@@ -70,6 +70,11 @@ const renderTitle = () => {
     ctx.font = "12px Roboto";
     ctx.fillText("<press space/>", 200, 250);
 };
+const renderEnd = () => {
+    ctx.font = "24px Roboto";
+    ctx.textAlign = "center";
+    ctx.fillText("this is how my cat opens my door", 200, 100);
+};
 let space = false;
 const spacePress = () => space = true;
 const spaceRealese = () => space = false;
@@ -137,7 +142,13 @@ const catJumping = async () => {
         states = catEnd;
     renderAllDoor();
 };
+let fadeEnd = 255;
 const catEnd = async () => {
+    ctx.fillStyle = `rgb(${fadeEnd},${fadeEnd},${fadeEnd})`;
+    ;
+    renderEnd();
+    if (fadeEnd > 0)
+        fadeEnd -= 10;
     miau.render();
     renderAllDoor();
 };
